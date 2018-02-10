@@ -7,29 +7,29 @@ import {Any, Arr, Bool, Int, Map, Str, TypedArr, TypedMap, Uint} from "messagepa
 // Catalog holds the data for a message catalog which includes localized
 // messages and the locale information needed to format numbers and plurals.
 export const Catalog = {
+	_fields: {
+		1: ["version", Int],
+		2: ["locale", Locale],
+		3: ["messages", _MessageArr],
+	},
+
 	enc(buf, v) {
 		Map.encHeader(buf, 3);
-		Int.enc(buf, 1);
-		Int.enc(buf, v.version);
-		Int.enc(buf, 2);
-		Locale.enc(buf, v.locale);
-		Int.enc(buf, 3);
-		_MessageArr.enc(buf, v.messages);
+		for(const k in this._fields) {
+			const f = this._fields[k];
+			Int.enc(buf, k);
+			f[1].enc(buf, v[f[0]]);
+		}
 	},
 
 	dec(buf) {
 		const res = {};
-		let n = Map.decHeader(buf);
-		while(n-- > 0) {
-			switch(Int.dec(buf)) {
-			case 1: // version
-				res.version = Int.dec(buf); break;
-			case 2: // locale
-				res.locale = Locale.dec(buf); break;
-			case 3: // messages
-				res.messages = _MessageArr.dec(buf); break;
-			default:
-				Any.dec(buf)
+		for(let n = Map.decHeader(buf); n > 0; --n) {
+			const f = this._fields[Int.dec(buf)];
+			if(f) {
+				res[f[0]] = f[1].dec(buf);
+			} else {
+				Any.dec(buf);
 			}
 		}
 		return res;
@@ -38,45 +38,33 @@ export const Catalog = {
 
 // Symbols holds all the symbols that are used to format a number in a specific locale.
 export const Symbols = {
+	_fields: {
+		1: ["decimal", Str],
+		2: ["group", Str],
+		3: ["percent", Str],
+		4: ["minus", Str],
+		5: ["inf", Str],
+		6: ["nan", Str],
+		7: ["zero", Uint],
+	},
+
 	enc(buf, v) {
 		Map.encHeader(buf, 7);
-		Int.enc(buf, 1);
-		Str.enc(buf, v.decimal);
-		Int.enc(buf, 2);
-		Str.enc(buf, v.group);
-		Int.enc(buf, 3);
-		Str.enc(buf, v.percent);
-		Int.enc(buf, 4);
-		Str.enc(buf, v.minus);
-		Int.enc(buf, 5);
-		Str.enc(buf, v.inf);
-		Int.enc(buf, 6);
-		Str.enc(buf, v.nan);
-		Int.enc(buf, 7);
-		Uint.enc(buf, v.zero);
+		for(const k in this._fields) {
+			const f = this._fields[k];
+			Int.enc(buf, k);
+			f[1].enc(buf, v[f[0]]);
+		}
 	},
 
 	dec(buf) {
 		const res = {};
-		let n = Map.decHeader(buf);
-		while(n-- > 0) {
-			switch(Int.dec(buf)) {
-			case 1: // decimal
-				res.decimal = Str.dec(buf); break;
-			case 2: // group
-				res.group = Str.dec(buf); break;
-			case 3: // percent
-				res.percent = Str.dec(buf); break;
-			case 4: // minus
-				res.minus = Str.dec(buf); break;
-			case 5: // inf
-				res.inf = Str.dec(buf); break;
-			case 6: // nan
-				res.nan = Str.dec(buf); break;
-			case 7: // zero
-				res.zero = Uint.dec(buf); break;
-			default:
-				Any.dec(buf)
+		for(let n = Map.decHeader(buf); n > 0; --n) {
+			const f = this._fields[Int.dec(buf)];
+			if(f) {
+				res[f[0]] = f[1].dec(buf);
+			} else {
+				Any.dec(buf);
 			}
 		}
 		return res;
@@ -85,61 +73,37 @@ export const Symbols = {
 
 // NumberFormat holds all relevant information to format a number in a specific locale.
 export const NumberFormat = {
+	_fields: {
+		1: ["symbols", Symbols],
+		2: ["positivePrefix", Str],
+		3: ["positiveSuffix", Str],
+		4: ["negativePrefix", Str],
+		5: ["negativeSuffix", Str],
+		6: ["minIntegerDigits", Int],
+		7: ["minFractionDigits", Int],
+		8: ["maxFractionDigits", Int],
+		9: ["primaryIntegerGrouping", Int],
+		10: ["secondaryIntegerGrouping", Int],
+		11: ["fractionGrouping", Int],
+	},
+
 	enc(buf, v) {
 		Map.encHeader(buf, 11);
-		Int.enc(buf, 1);
-		Symbols.enc(buf, v.symbols);
-		Int.enc(buf, 2);
-		Str.enc(buf, v.positivePrefix);
-		Int.enc(buf, 3);
-		Str.enc(buf, v.positiveSuffix);
-		Int.enc(buf, 4);
-		Str.enc(buf, v.negativePrefix);
-		Int.enc(buf, 5);
-		Str.enc(buf, v.negativeSuffix);
-		Int.enc(buf, 6);
-		Int.enc(buf, v.minIntegerDigits);
-		Int.enc(buf, 7);
-		Int.enc(buf, v.minFractionDigits);
-		Int.enc(buf, 8);
-		Int.enc(buf, v.maxFractionDigits);
-		Int.enc(buf, 9);
-		Int.enc(buf, v.primaryIntegerGrouping);
-		Int.enc(buf, 10);
-		Int.enc(buf, v.secondaryIntegerGrouping);
-		Int.enc(buf, 11);
-		Int.enc(buf, v.fractionGrouping);
+		for(const k in this._fields) {
+			const f = this._fields[k];
+			Int.enc(buf, k);
+			f[1].enc(buf, v[f[0]]);
+		}
 	},
 
 	dec(buf) {
 		const res = {};
-		let n = Map.decHeader(buf);
-		while(n-- > 0) {
-			switch(Int.dec(buf)) {
-			case 1: // symbols
-				res.symbols = Symbols.dec(buf); break;
-			case 2: // positivePrefix
-				res.positivePrefix = Str.dec(buf); break;
-			case 3: // positiveSuffix
-				res.positiveSuffix = Str.dec(buf); break;
-			case 4: // negativePrefix
-				res.negativePrefix = Str.dec(buf); break;
-			case 5: // negativeSuffix
-				res.negativeSuffix = Str.dec(buf); break;
-			case 6: // minIntegerDigits
-				res.minIntegerDigits = Int.dec(buf); break;
-			case 7: // minFractionDigits
-				res.minFractionDigits = Int.dec(buf); break;
-			case 8: // maxFractionDigits
-				res.maxFractionDigits = Int.dec(buf); break;
-			case 9: // primaryIntegerGrouping
-				res.primaryIntegerGrouping = Int.dec(buf); break;
-			case 10: // secondaryIntegerGrouping
-				res.secondaryIntegerGrouping = Int.dec(buf); break;
-			case 11: // fractionGrouping
-				res.fractionGrouping = Int.dec(buf); break;
-			default:
-				Any.dec(buf)
+		for(let n = Map.decHeader(buf); n > 0; --n) {
+			const f = this._fields[Int.dec(buf)];
+			if(f) {
+				res[f[0]] = f[1].dec(buf);
+			} else {
+				Any.dec(buf);
 			}
 		}
 		return res;
@@ -162,25 +126,28 @@ export const Connective = Int
 // If the lower bound equals the upper bound, the range will collapse
 // to a single value.
 export const Range = {
+	_fields: {
+		1: ["lowerBound", Int],
+		2: ["upperBound", Int],
+	},
+
 	enc(buf, v) {
 		Map.encHeader(buf, 2);
-		Int.enc(buf, 1);
-		Int.enc(buf, v.lowerBound);
-		Int.enc(buf, 2);
-		Int.enc(buf, v.upperBound);
+		for(const k in this._fields) {
+			const f = this._fields[k];
+			Int.enc(buf, k);
+			f[1].enc(buf, v[f[0]]);
+		}
 	},
 
 	dec(buf) {
 		const res = {};
-		let n = Map.decHeader(buf);
-		while(n-- > 0) {
-			switch(Int.dec(buf)) {
-			case 1: // lowerBound
-				res.lowerBound = Int.dec(buf); break;
-			case 2: // upperBound
-				res.upperBound = Int.dec(buf); break;
-			default:
-				Any.dec(buf)
+		for(let n = Map.decHeader(buf); n > 0; --n) {
+			const f = this._fields[Int.dec(buf)];
+			if(f) {
+				res[f[0]] = f[1].dec(buf);
+			} else {
+				Any.dec(buf);
 			}
 		}
 		return res;
@@ -196,37 +163,31 @@ export const Range = {
 //
 // Example for a plural rule: i%10=1..3
 export const PluralRule = {
+	_fields: {
+		1: ["operand", Operand],
+		2: ["modulo", Int],
+		3: ["negate", Bool],
+		4: ["ranges", _RangeArr],
+		5: ["connective", Connective],
+	},
+
 	enc(buf, v) {
 		Map.encHeader(buf, 5);
-		Int.enc(buf, 1);
-		Operand.enc(buf, v.operand);
-		Int.enc(buf, 2);
-		Int.enc(buf, v.modulo);
-		Int.enc(buf, 3);
-		Bool.enc(buf, v.negate);
-		Int.enc(buf, 4);
-		_RangeArr.enc(buf, v.ranges);
-		Int.enc(buf, 5);
-		Connective.enc(buf, v.connective);
+		for(const k in this._fields) {
+			const f = this._fields[k];
+			Int.enc(buf, k);
+			f[1].enc(buf, v[f[0]]);
+		}
 	},
 
 	dec(buf) {
 		const res = {};
-		let n = Map.decHeader(buf);
-		while(n-- > 0) {
-			switch(Int.dec(buf)) {
-			case 1: // operand
-				res.operand = Operand.dec(buf); break;
-			case 2: // modulo
-				res.modulo = Int.dec(buf); break;
-			case 3: // negate
-				res.negate = Bool.dec(buf); break;
-			case 4: // ranges
-				res.ranges = _RangeArr.dec(buf); break;
-			case 5: // connective
-				res.connective = Connective.dec(buf); break;
-			default:
-				Any.dec(buf)
+		for(let n = Map.decHeader(buf); n > 0; --n) {
+			const f = this._fields[Int.dec(buf)];
+			if(f) {
+				res[f[0]] = f[1].dec(buf);
+			} else {
+				Any.dec(buf);
 			}
 		}
 		return res;
@@ -237,25 +198,28 @@ export const PluralRule = {
 // for a specific plural tag where all rules are connected with each other (see
 // Rule and Connective).
 export const Plural = {
+	_fields: {
+		1: ["tag", PluralTag],
+		2: ["rules", _PluralRuleArr],
+	},
+
 	enc(buf, v) {
 		Map.encHeader(buf, 2);
-		Int.enc(buf, 1);
-		PluralTag.enc(buf, v.tag);
-		Int.enc(buf, 2);
-		_PluralRuleArr.enc(buf, v.rules);
+		for(const k in this._fields) {
+			const f = this._fields[k];
+			Int.enc(buf, k);
+			f[1].enc(buf, v[f[0]]);
+		}
 	},
 
 	dec(buf) {
 		const res = {};
-		let n = Map.decHeader(buf);
-		while(n-- > 0) {
-			switch(Int.dec(buf)) {
-			case 1: // tag
-				res.tag = PluralTag.dec(buf); break;
-			case 2: // rules
-				res.rules = _PluralRuleArr.dec(buf); break;
-			default:
-				Any.dec(buf)
+		for(let n = Map.decHeader(buf); n > 0; --n) {
+			const f = this._fields[Int.dec(buf)];
+			if(f) {
+				res[f[0]] = f[1].dec(buf);
+			} else {
+				Any.dec(buf);
 			}
 		}
 		return res;
@@ -265,41 +229,32 @@ export const Plural = {
 // Locale holds the data which is necessary to format data in a region
 // specific format.
 export const Locale = {
+	_fields: {
+		1: ["id", Str],
+		2: ["decimalFormat", NumberFormat],
+		3: ["moneyFormat", NumberFormat],
+		4: ["percentFormat", NumberFormat],
+		5: ["cardinalPlurals", _PluralArr],
+		6: ["ordinalPlurals", _PluralArr],
+	},
+
 	enc(buf, v) {
 		Map.encHeader(buf, 6);
-		Int.enc(buf, 1);
-		Str.enc(buf, v.id);
-		Int.enc(buf, 2);
-		NumberFormat.enc(buf, v.decimalFormat);
-		Int.enc(buf, 3);
-		NumberFormat.enc(buf, v.moneyFormat);
-		Int.enc(buf, 4);
-		NumberFormat.enc(buf, v.percentFormat);
-		Int.enc(buf, 5);
-		_PluralArr.enc(buf, v.cardinalPlurals);
-		Int.enc(buf, 6);
-		_PluralArr.enc(buf, v.ordinalPlurals);
+		for(const k in this._fields) {
+			const f = this._fields[k];
+			Int.enc(buf, k);
+			f[1].enc(buf, v[f[0]]);
+		}
 	},
 
 	dec(buf) {
 		const res = {};
-		let n = Map.decHeader(buf);
-		while(n-- > 0) {
-			switch(Int.dec(buf)) {
-			case 1: // id
-				res.id = Str.dec(buf); break;
-			case 2: // decimalFormat
-				res.decimalFormat = NumberFormat.dec(buf); break;
-			case 3: // moneyFormat
-				res.moneyFormat = NumberFormat.dec(buf); break;
-			case 4: // percentFormat
-				res.percentFormat = NumberFormat.dec(buf); break;
-			case 5: // cardinalPlurals
-				res.cardinalPlurals = _PluralArr.dec(buf); break;
-			case 6: // ordinalPlurals
-				res.ordinalPlurals = _PluralArr.dec(buf); break;
-			default:
-				Any.dec(buf)
+		for(let n = Map.decHeader(buf); n > 0; --n) {
+			const f = this._fields[Int.dec(buf)];
+			if(f) {
+				res[f[0]] = f[1].dec(buf);
+			} else {
+				Any.dec(buf);
 			}
 		}
 		return res;
@@ -311,33 +266,30 @@ export const Locale = {
 // message text. If the message does not contain any replacement variables,
 // there will only be a single string fragment.
 export const Message = {
+	_fields: {
+		1: ["section", Str],
+		2: ["key", Str],
+		3: ["text", _StrArr],
+		4: ["replacements", _ReplacementArr],
+	},
+
 	enc(buf, v) {
 		Map.encHeader(buf, 4);
-		Int.enc(buf, 1);
-		Str.enc(buf, v.section);
-		Int.enc(buf, 2);
-		Str.enc(buf, v.key);
-		Int.enc(buf, 3);
-		_StrArr.enc(buf, v.text);
-		Int.enc(buf, 4);
-		_ReplacementArr.enc(buf, v.replacements);
+		for(const k in this._fields) {
+			const f = this._fields[k];
+			Int.enc(buf, k);
+			f[1].enc(buf, v[f[0]]);
+		}
 	},
 
 	dec(buf) {
 		const res = {};
-		let n = Map.decHeader(buf);
-		while(n-- > 0) {
-			switch(Int.dec(buf)) {
-			case 1: // section
-				res.section = Str.dec(buf); break;
-			case 2: // key
-				res.key = Str.dec(buf); break;
-			case 3: // text
-				res.text = _StrArr.dec(buf); break;
-			case 4: // replacements
-				res.replacements = _ReplacementArr.dec(buf); break;
-			default:
-				Any.dec(buf)
+		for(let n = Map.decHeader(buf); n > 0; --n) {
+			const f = this._fields[Int.dec(buf)];
+			if(f) {
+				res[f[0]] = f[1].dec(buf);
+			} else {
+				Any.dec(buf);
 			}
 		}
 		return res;
@@ -348,33 +300,30 @@ export const Message = {
 // during runtime. The key defines the variable's name which will be passed in. The type
 // contains more details about the particular replacement.
 export const Replacement = {
+	_fields: {
+		1: ["key", Str],
+		2: ["textPos", Int],
+		3: ["type", ReplacementType],
+		4: ["details", ReplacementDetails],
+	},
+
 	enc(buf, v) {
 		Map.encHeader(buf, 4);
-		Int.enc(buf, 1);
-		Str.enc(buf, v.key);
-		Int.enc(buf, 2);
-		Int.enc(buf, v.textPos);
-		Int.enc(buf, 3);
-		ReplacementType.enc(buf, v.type);
-		Int.enc(buf, 4);
-		ReplacementDetails.enc(buf, v.details);
+		for(const k in this._fields) {
+			const f = this._fields[k];
+			Int.enc(buf, k);
+			f[1].enc(buf, v[f[0]]);
+		}
 	},
 
 	dec(buf) {
 		const res = {};
-		let n = Map.decHeader(buf);
-		while(n-- > 0) {
-			switch(Int.dec(buf)) {
-			case 1: // key
-				res.key = Str.dec(buf); break;
-			case 2: // textPos
-				res.textPos = Int.dec(buf); break;
-			case 3: // type
-				res.type = ReplacementType.dec(buf); break;
-			case 4: // details
-				res.details = ReplacementDetails.dec(buf); break;
-			default:
-				Any.dec(buf)
+		for(let n = Map.decHeader(buf); n > 0; --n) {
+			const f = this._fields[Int.dec(buf)];
+			if(f) {
+				res[f[0]] = f[1].dec(buf);
+			} else {
+				Any.dec(buf);
 			}
 		}
 		return res;
@@ -384,48 +333,49 @@ export const Replacement = {
 // ReplacementDetails holds the details for particular replacements. The special
 // EmptyDetails branch indicates that there a no details for the replacement type.
 export const ReplacementDetails = {
-	enc(buf, v) {
-		Arr.encHeader(buf, 2);
+	_types: {
+		1: EmptyDetails,
+		2: MoneyDetails,
+		3: PluralDetails,
+		4: SelectDetails,
+	},
+
+	_keyof(v) {
 		switch(typeof v) {
 		case "object":
-			v = v || {};
-			if("currency" in v) {
-				// MoneyDetails
-				Int.enc(buf, 2);
-				return MoneyDetails.enc(buf, v);
+			if(v) {
+				if("currency" in v) {
+					return 2; // MoneyDetails
+				}
+				if("type" in v && "variants" in v && "custom" in v) {
+					return 3; // PluralDetails
+				}
+				if("cases" in v && "fallback" in v) {
+					return 4; // SelectDetails
+				}
 			}
-			if("type" in v && "variants" in v && "custom" in v) {
-				// PluralDetails
-				Int.enc(buf, 3);
-				return PluralDetails.enc(buf, v);
-			}
-			if("cases" in v && "fallback" in v) {
-				// SelectDetails
-				Int.enc(buf, 4);
-				return SelectDetails.enc(buf, v);
-			}
-			// EmptyDetails
-			Int.enc(buf, 1);
-			return EmptyDetails.enc(buf, v);
+			return 1; // EmptyDetails
 		default:
 			throw new TypeError("invalid union type");
 		}
 	},
 
+	enc(buf, v) {
+		Arr.encHeader(buf, 2);
+
+		const k = this._keyof(v);
+		Int.enc(buf, k);
+		this._types[k].enc(buf, v);
+	},
+
 	dec(buf) {
 		Arr.decHeader(buf, 2);
-		switch(Int.dec(buf)) {
-		case 1:
-			return EmptyDetails.dec(buf);
-		case 2:
-			return MoneyDetails.dec(buf);
-		case 3:
-			return PluralDetails.dec(buf);
-		case 4:
-			return SelectDetails.dec(buf);
-		default :
+
+		const t = this._types[Int.dec(buf)];
+		if(!t) {
 			throw new TypeError("invalid union type");
 		}
+		return t.dec(buf);
 	},
 };
 
@@ -439,17 +389,26 @@ export const PluralType = Int
 // EmptyDetails describes a special type for a replacement that has no further
 // details attached.
 export const EmptyDetails = {
+	_fields: {
+	},
+
 	enc(buf, v) {
 		Map.encHeader(buf, 0);
+		for(const k in this._fields) {
+			const f = this._fields[k];
+			Int.enc(buf, k);
+			f[1].enc(buf, v[f[0]]);
+		}
 	},
 
 	dec(buf) {
 		const res = {};
-		let n = Map.decHeader(buf);
-		while(n-- > 0) {
-			switch(Int.dec(buf)) {
-			default:
-				Any.dec(buf)
+		for(let n = Map.decHeader(buf); n > 0; --n) {
+			const f = this._fields[Int.dec(buf)];
+			if(f) {
+				res[f[0]] = f[1].dec(buf);
+			} else {
+				Any.dec(buf);
 			}
 		}
 		return res;
@@ -458,21 +417,27 @@ export const EmptyDetails = {
 
 // MoneyDetails contains the replacement details for amounts of money.
 export const MoneyDetails = {
+	_fields: {
+		1: ["currency", Str],
+	},
+
 	enc(buf, v) {
 		Map.encHeader(buf, 1);
-		Int.enc(buf, 1);
-		Str.enc(buf, v.currency);
+		for(const k in this._fields) {
+			const f = this._fields[k];
+			Int.enc(buf, k);
+			f[1].enc(buf, v[f[0]]);
+		}
 	},
 
 	dec(buf) {
 		const res = {};
-		let n = Map.decHeader(buf);
-		while(n-- > 0) {
-			switch(Int.dec(buf)) {
-			case 1: // currency
-				res.currency = Str.dec(buf); break;
-			default:
-				Any.dec(buf)
+		for(let n = Map.decHeader(buf); n > 0; --n) {
+			const f = this._fields[Int.dec(buf)];
+			if(f) {
+				res[f[0]] = f[1].dec(buf);
+			} else {
+				Any.dec(buf);
 			}
 		}
 		return res;
@@ -483,29 +448,29 @@ export const MoneyDetails = {
 // variable, different text for each plural rule can be selected. It contains
 // the variants for the supported plural tags and custom overwrites.
 export const PluralDetails = {
+	_fields: {
+		1: ["type", PluralType],
+		2: ["variants", _PluralTagMessageMap],
+		3: ["custom", _IntMessageMap],
+	},
+
 	enc(buf, v) {
 		Map.encHeader(buf, 3);
-		Int.enc(buf, 1);
-		PluralType.enc(buf, v.type);
-		Int.enc(buf, 2);
-		_PluralTagMessageMap.enc(buf, v.variants);
-		Int.enc(buf, 3);
-		_IntMessageMap.enc(buf, v.custom);
+		for(const k in this._fields) {
+			const f = this._fields[k];
+			Int.enc(buf, k);
+			f[1].enc(buf, v[f[0]]);
+		}
 	},
 
 	dec(buf) {
 		const res = {};
-		let n = Map.decHeader(buf);
-		while(n-- > 0) {
-			switch(Int.dec(buf)) {
-			case 1: // type
-				res.type = PluralType.dec(buf); break;
-			case 2: // variants
-				res.variants = _PluralTagMessageMap.dec(buf); break;
-			case 3: // custom
-				res.custom = _IntMessageMap.dec(buf); break;
-			default:
-				Any.dec(buf)
+		for(let n = Map.decHeader(buf); n > 0; --n) {
+			const f = this._fields[Int.dec(buf)];
+			if(f) {
+				res[f[0]] = f[1].dec(buf);
+			} else {
+				Any.dec(buf);
 			}
 		}
 		return res;
@@ -516,25 +481,28 @@ export const PluralDetails = {
 // depending on the given variable. The fallback is an optional value which
 // describes the default case.
 export const SelectDetails = {
+	_fields: {
+		1: ["cases", _StrMessageMap],
+		2: ["fallback", Str],
+	},
+
 	enc(buf, v) {
 		Map.encHeader(buf, 2);
-		Int.enc(buf, 1);
-		_StrMessageMap.enc(buf, v.cases);
-		Int.enc(buf, 2);
-		Str.enc(buf, v.fallback);
+		for(const k in this._fields) {
+			const f = this._fields[k];
+			Int.enc(buf, k);
+			f[1].enc(buf, v[f[0]]);
+		}
 	},
 
 	dec(buf) {
 		const res = {};
-		let n = Map.decHeader(buf);
-		while(n-- > 0) {
-			switch(Int.dec(buf)) {
-			case 1: // cases
-				res.cases = _StrMessageMap.dec(buf); break;
-			case 2: // fallback
-				res.fallback = Str.dec(buf); break;
-			default:
-				Any.dec(buf)
+		for(let n = Map.decHeader(buf); n > 0; --n) {
+			const f = this._fields[Int.dec(buf)];
+			if(f) {
+				res[f[0]] = f[1].dec(buf);
+			} else {
+				Any.dec(buf);
 			}
 		}
 		return res;
