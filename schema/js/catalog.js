@@ -7,16 +7,10 @@ import {Any, Arr, Bool, Int, Map, Str, TypedArr, TypedMap, Uint} from "messagepa
 // Catalog holds the data for a message catalog which includes localized
 // messages and the locale information needed to format numbers and plurals.
 export const Catalog = {
-	_fields: {
-		1: ["version", Int],
-		2: ["locale", Locale],
-		3: ["messages", _MessageArr],
-	},
-
 	enc(buf, v) {
 		Map.encHeader(buf, 3);
-		for(const k in this._fields) {
-			const f = this._fields[k];
+		for(const k in __meta.Catalog) {
+			const f = __meta.Catalog[k];
 			Int.enc(buf, k);
 			f[1].enc(buf, v[f[0]]);
 		}
@@ -25,7 +19,7 @@ export const Catalog = {
 	dec(buf) {
 		const res = {};
 		for(let n = Map.decHeader(buf); n > 0; --n) {
-			const f = this._fields[Int.dec(buf)];
+			const f = __meta.Catalog[Int.dec(buf)];
 			if(f) {
 				res[f[0]] = f[1].dec(buf);
 			} else {
@@ -38,20 +32,10 @@ export const Catalog = {
 
 // Symbols holds all the symbols that are used to format a number in a specific locale.
 export const Symbols = {
-	_fields: {
-		1: ["decimal", Str],
-		2: ["group", Str],
-		3: ["percent", Str],
-		4: ["minus", Str],
-		5: ["inf", Str],
-		6: ["nan", Str],
-		7: ["zero", Uint],
-	},
-
 	enc(buf, v) {
 		Map.encHeader(buf, 7);
-		for(const k in this._fields) {
-			const f = this._fields[k];
+		for(const k in __meta.Symbols) {
+			const f = __meta.Symbols[k];
 			Int.enc(buf, k);
 			f[1].enc(buf, v[f[0]]);
 		}
@@ -60,7 +44,7 @@ export const Symbols = {
 	dec(buf) {
 		const res = {};
 		for(let n = Map.decHeader(buf); n > 0; --n) {
-			const f = this._fields[Int.dec(buf)];
+			const f = __meta.Symbols[Int.dec(buf)];
 			if(f) {
 				res[f[0]] = f[1].dec(buf);
 			} else {
@@ -73,24 +57,10 @@ export const Symbols = {
 
 // NumberFormat holds all relevant information to format a number in a specific locale.
 export const NumberFormat = {
-	_fields: {
-		1: ["symbols", Symbols],
-		2: ["positivePrefix", Str],
-		3: ["positiveSuffix", Str],
-		4: ["negativePrefix", Str],
-		5: ["negativeSuffix", Str],
-		6: ["minIntegerDigits", Int],
-		7: ["minFractionDigits", Int],
-		8: ["maxFractionDigits", Int],
-		9: ["primaryIntegerGrouping", Int],
-		10: ["secondaryIntegerGrouping", Int],
-		11: ["fractionGrouping", Int],
-	},
-
 	enc(buf, v) {
 		Map.encHeader(buf, 11);
-		for(const k in this._fields) {
-			const f = this._fields[k];
+		for(const k in __meta.NumberFormat) {
+			const f = __meta.NumberFormat[k];
 			Int.enc(buf, k);
 			f[1].enc(buf, v[f[0]]);
 		}
@@ -99,7 +69,7 @@ export const NumberFormat = {
 	dec(buf) {
 		const res = {};
 		for(let n = Map.decHeader(buf); n > 0; --n) {
-			const f = this._fields[Int.dec(buf)];
+			const f = __meta.NumberFormat[Int.dec(buf)];
 			if(f) {
 				res[f[0]] = f[1].dec(buf);
 			} else {
@@ -126,15 +96,10 @@ export const Connective = Int
 // If the lower bound equals the upper bound, the range will collapse
 // to a single value.
 export const Range = {
-	_fields: {
-		1: ["lowerBound", Int],
-		2: ["upperBound", Int],
-	},
-
 	enc(buf, v) {
 		Map.encHeader(buf, 2);
-		for(const k in this._fields) {
-			const f = this._fields[k];
+		for(const k in __meta.Range) {
+			const f = __meta.Range[k];
 			Int.enc(buf, k);
 			f[1].enc(buf, v[f[0]]);
 		}
@@ -143,7 +108,7 @@ export const Range = {
 	dec(buf) {
 		const res = {};
 		for(let n = Map.decHeader(buf); n > 0; --n) {
-			const f = this._fields[Int.dec(buf)];
+			const f = __meta.Range[Int.dec(buf)];
 			if(f) {
 				res[f[0]] = f[1].dec(buf);
 			} else {
@@ -163,18 +128,10 @@ export const Range = {
 //
 // Example for a plural rule: i%10=1..3
 export const PluralRule = {
-	_fields: {
-		1: ["operand", Operand],
-		2: ["modulo", Int],
-		3: ["negate", Bool],
-		4: ["ranges", _RangeArr],
-		5: ["connective", Connective],
-	},
-
 	enc(buf, v) {
 		Map.encHeader(buf, 5);
-		for(const k in this._fields) {
-			const f = this._fields[k];
+		for(const k in __meta.PluralRule) {
+			const f = __meta.PluralRule[k];
 			Int.enc(buf, k);
 			f[1].enc(buf, v[f[0]]);
 		}
@@ -183,7 +140,7 @@ export const PluralRule = {
 	dec(buf) {
 		const res = {};
 		for(let n = Map.decHeader(buf); n > 0; --n) {
-			const f = this._fields[Int.dec(buf)];
+			const f = __meta.PluralRule[Int.dec(buf)];
 			if(f) {
 				res[f[0]] = f[1].dec(buf);
 			} else {
@@ -198,15 +155,10 @@ export const PluralRule = {
 // for a specific plural tag where all rules are connected with each other (see
 // Rule and Connective).
 export const Plural = {
-	_fields: {
-		1: ["tag", PluralTag],
-		2: ["rules", _PluralRuleArr],
-	},
-
 	enc(buf, v) {
 		Map.encHeader(buf, 2);
-		for(const k in this._fields) {
-			const f = this._fields[k];
+		for(const k in __meta.Plural) {
+			const f = __meta.Plural[k];
 			Int.enc(buf, k);
 			f[1].enc(buf, v[f[0]]);
 		}
@@ -215,7 +167,7 @@ export const Plural = {
 	dec(buf) {
 		const res = {};
 		for(let n = Map.decHeader(buf); n > 0; --n) {
-			const f = this._fields[Int.dec(buf)];
+			const f = __meta.Plural[Int.dec(buf)];
 			if(f) {
 				res[f[0]] = f[1].dec(buf);
 			} else {
@@ -229,19 +181,10 @@ export const Plural = {
 // Locale holds the data which is necessary to format data in a region
 // specific format.
 export const Locale = {
-	_fields: {
-		1: ["id", Str],
-		2: ["decimalFormat", NumberFormat],
-		3: ["moneyFormat", NumberFormat],
-		4: ["percentFormat", NumberFormat],
-		5: ["cardinalPlurals", _PluralArr],
-		6: ["ordinalPlurals", _PluralArr],
-	},
-
 	enc(buf, v) {
 		Map.encHeader(buf, 6);
-		for(const k in this._fields) {
-			const f = this._fields[k];
+		for(const k in __meta.Locale) {
+			const f = __meta.Locale[k];
 			Int.enc(buf, k);
 			f[1].enc(buf, v[f[0]]);
 		}
@@ -250,7 +193,7 @@ export const Locale = {
 	dec(buf) {
 		const res = {};
 		for(let n = Map.decHeader(buf); n > 0; --n) {
-			const f = this._fields[Int.dec(buf)];
+			const f = __meta.Locale[Int.dec(buf)];
 			if(f) {
 				res[f[0]] = f[1].dec(buf);
 			} else {
@@ -266,17 +209,10 @@ export const Locale = {
 // message text. If the message does not contain any replacement variables,
 // there will only be a single string fragment.
 export const Message = {
-	_fields: {
-		1: ["section", Str],
-		2: ["key", Str],
-		3: ["text", _StrArr],
-		4: ["replacements", _ReplacementArr],
-	},
-
 	enc(buf, v) {
 		Map.encHeader(buf, 4);
-		for(const k in this._fields) {
-			const f = this._fields[k];
+		for(const k in __meta.Message) {
+			const f = __meta.Message[k];
 			Int.enc(buf, k);
 			f[1].enc(buf, v[f[0]]);
 		}
@@ -285,7 +221,7 @@ export const Message = {
 	dec(buf) {
 		const res = {};
 		for(let n = Map.decHeader(buf); n > 0; --n) {
-			const f = this._fields[Int.dec(buf)];
+			const f = __meta.Message[Int.dec(buf)];
 			if(f) {
 				res[f[0]] = f[1].dec(buf);
 			} else {
@@ -300,17 +236,10 @@ export const Message = {
 // during runtime. The key defines the variable's name which will be passed in. The type
 // contains more details about the particular replacement.
 export const Replacement = {
-	_fields: {
-		1: ["key", Str],
-		2: ["textPos", Int],
-		3: ["type", ReplacementType],
-		4: ["details", ReplacementDetails],
-	},
-
 	enc(buf, v) {
 		Map.encHeader(buf, 4);
-		for(const k in this._fields) {
-			const f = this._fields[k];
+		for(const k in __meta.Replacement) {
+			const f = __meta.Replacement[k];
 			Int.enc(buf, k);
 			f[1].enc(buf, v[f[0]]);
 		}
@@ -319,7 +248,7 @@ export const Replacement = {
 	dec(buf) {
 		const res = {};
 		for(let n = Map.decHeader(buf); n > 0; --n) {
-			const f = this._fields[Int.dec(buf)];
+			const f = __meta.Replacement[Int.dec(buf)];
 			if(f) {
 				res[f[0]] = f[1].dec(buf);
 			} else {
@@ -333,45 +262,18 @@ export const Replacement = {
 // ReplacementDetails holds the details for particular replacements. The special
 // EmptyDetails branch indicates that there a no details for the replacement type.
 export const ReplacementDetails = {
-	_types: {
-		1: EmptyDetails,
-		2: MoneyDetails,
-		3: PluralDetails,
-		4: SelectDetails,
-	},
-
-	_keyof(v) {
-		switch(typeof v) {
-		case "object":
-			if(v) {
-				if("currency" in v) {
-					return 2; // MoneyDetails
-				}
-				if("type" in v && "variants" in v && "custom" in v) {
-					return 3; // PluralDetails
-				}
-				if("cases" in v && "fallback" in v) {
-					return 4; // SelectDetails
-				}
-			}
-			return 1; // EmptyDetails
-		default:
-			throw new TypeError("invalid union type");
-		}
-	},
-
 	enc(buf, v) {
 		Arr.encHeader(buf, 2);
 
-		const k = this._keyof(v);
+		const k = __meta.ReplacementDetails.keyof(v);
 		Int.enc(buf, k);
-		this._types[k].enc(buf, v);
+		__meta.ReplacementDetails[k].enc(buf, v);
 	},
 
 	dec(buf) {
 		Arr.decHeader(buf, 2);
 
-		const t = this._types[Int.dec(buf)];
+		const t = __meta.ReplacementDetails[Int.dec(buf)];
 		if(!t) {
 			throw new TypeError("invalid union type");
 		}
@@ -389,13 +291,10 @@ export const PluralType = Int
 // EmptyDetails describes a special type for a replacement that has no further
 // details attached.
 export const EmptyDetails = {
-	_fields: {
-	},
-
 	enc(buf, v) {
 		Map.encHeader(buf, 0);
-		for(const k in this._fields) {
-			const f = this._fields[k];
+		for(const k in __meta.EmptyDetails) {
+			const f = __meta.EmptyDetails[k];
 			Int.enc(buf, k);
 			f[1].enc(buf, v[f[0]]);
 		}
@@ -404,7 +303,7 @@ export const EmptyDetails = {
 	dec(buf) {
 		const res = {};
 		for(let n = Map.decHeader(buf); n > 0; --n) {
-			const f = this._fields[Int.dec(buf)];
+			const f = __meta.EmptyDetails[Int.dec(buf)];
 			if(f) {
 				res[f[0]] = f[1].dec(buf);
 			} else {
@@ -417,14 +316,10 @@ export const EmptyDetails = {
 
 // MoneyDetails contains the replacement details for amounts of money.
 export const MoneyDetails = {
-	_fields: {
-		1: ["currency", Str],
-	},
-
 	enc(buf, v) {
 		Map.encHeader(buf, 1);
-		for(const k in this._fields) {
-			const f = this._fields[k];
+		for(const k in __meta.MoneyDetails) {
+			const f = __meta.MoneyDetails[k];
 			Int.enc(buf, k);
 			f[1].enc(buf, v[f[0]]);
 		}
@@ -433,7 +328,7 @@ export const MoneyDetails = {
 	dec(buf) {
 		const res = {};
 		for(let n = Map.decHeader(buf); n > 0; --n) {
-			const f = this._fields[Int.dec(buf)];
+			const f = __meta.MoneyDetails[Int.dec(buf)];
 			if(f) {
 				res[f[0]] = f[1].dec(buf);
 			} else {
@@ -448,16 +343,10 @@ export const MoneyDetails = {
 // variable, different text for each plural rule can be selected. It contains
 // the variants for the supported plural tags and custom overwrites.
 export const PluralDetails = {
-	_fields: {
-		1: ["type", PluralType],
-		2: ["variants", _PluralTagMessageMap],
-		3: ["custom", _IntMessageMap],
-	},
-
 	enc(buf, v) {
 		Map.encHeader(buf, 3);
-		for(const k in this._fields) {
-			const f = this._fields[k];
+		for(const k in __meta.PluralDetails) {
+			const f = __meta.PluralDetails[k];
 			Int.enc(buf, k);
 			f[1].enc(buf, v[f[0]]);
 		}
@@ -466,7 +355,7 @@ export const PluralDetails = {
 	dec(buf) {
 		const res = {};
 		for(let n = Map.decHeader(buf); n > 0; --n) {
-			const f = this._fields[Int.dec(buf)];
+			const f = __meta.PluralDetails[Int.dec(buf)];
 			if(f) {
 				res[f[0]] = f[1].dec(buf);
 			} else {
@@ -481,15 +370,10 @@ export const PluralDetails = {
 // depending on the given variable. The fallback is an optional value which
 // describes the default case.
 export const SelectDetails = {
-	_fields: {
-		1: ["cases", _StrMessageMap],
-		2: ["fallback", Str],
-	},
-
 	enc(buf, v) {
 		Map.encHeader(buf, 2);
-		for(const k in this._fields) {
-			const f = this._fields[k];
+		for(const k in __meta.SelectDetails) {
+			const f = __meta.SelectDetails[k];
 			Int.enc(buf, k);
 			f[1].enc(buf, v[f[0]]);
 		}
@@ -498,7 +382,7 @@ export const SelectDetails = {
 	dec(buf) {
 		const res = {};
 		for(let n = Map.decHeader(buf); n > 0; --n) {
-			const f = this._fields[Int.dec(buf)];
+			const f = __meta.SelectDetails[Int.dec(buf)];
 			if(f) {
 				res[f[0]] = f[1].dec(buf);
 			} else {
@@ -509,7 +393,7 @@ export const SelectDetails = {
 	},
 };
 
-// Required collection types.
+// required collection types
 const _IntMessageMap = TypedMap(Int, Message);
 const _MessageArr = TypedArr(Message);
 const _PluralArr = TypedArr(Plural);
@@ -519,3 +403,106 @@ const _RangeArr = TypedArr(Range);
 const _ReplacementArr = TypedArr(Replacement);
 const _StrArr = TypedArr(Str);
 const _StrMessageMap = TypedMap(Str, Message);
+
+// Metadata for struct and union types
+const __meta = {
+	Catalog: {
+		1: ["version", Int],
+		2: ["locale", Locale],
+		3: ["messages", _MessageArr],
+	},
+	Symbols: {
+		1: ["decimal", Str],
+		2: ["group", Str],
+		3: ["percent", Str],
+		4: ["minus", Str],
+		5: ["inf", Str],
+		6: ["nan", Str],
+		7: ["zero", Uint],
+	},
+	NumberFormat: {
+		1: ["symbols", Symbols],
+		2: ["positivePrefix", Str],
+		3: ["positiveSuffix", Str],
+		4: ["negativePrefix", Str],
+		5: ["negativeSuffix", Str],
+		6: ["minIntegerDigits", Int],
+		7: ["minFractionDigits", Int],
+		8: ["maxFractionDigits", Int],
+		9: ["primaryIntegerGrouping", Int],
+		10: ["secondaryIntegerGrouping", Int],
+		11: ["fractionGrouping", Int],
+	},
+	Range: {
+		1: ["lowerBound", Int],
+		2: ["upperBound", Int],
+	},
+	PluralRule: {
+		1: ["operand", Operand],
+		2: ["modulo", Int],
+		3: ["negate", Bool],
+		4: ["ranges", _RangeArr],
+		5: ["connective", Connective],
+	},
+	Plural: {
+		1: ["tag", PluralTag],
+		2: ["rules", _PluralRuleArr],
+	},
+	Locale: {
+		1: ["id", Str],
+		2: ["decimalFormat", NumberFormat],
+		3: ["moneyFormat", NumberFormat],
+		4: ["percentFormat", NumberFormat],
+		5: ["cardinalPlurals", _PluralArr],
+		6: ["ordinalPlurals", _PluralArr],
+	},
+	Message: {
+		1: ["section", Str],
+		2: ["key", Str],
+		3: ["text", _StrArr],
+		4: ["replacements", _ReplacementArr],
+	},
+	Replacement: {
+		1: ["key", Str],
+		2: ["textPos", Int],
+		3: ["type", ReplacementType],
+		4: ["details", ReplacementDetails],
+	},
+	ReplacementDetails: {
+		1: EmptyDetails,
+		2: MoneyDetails,
+		3: PluralDetails,
+		4: SelectDetails,
+		keyof(v) {
+			switch(typeof v) {
+			case "object":
+				if(v) {
+					if("currency" in v) {
+						return 2; // MoneyDetails
+					}
+					if("type" in v && "variants" in v && "custom" in v) {
+						return 3; // PluralDetails
+					}
+					if("cases" in v && "fallback" in v) {
+						return 4; // SelectDetails
+					}
+				}
+				return 1; // EmptyDetails
+			default:
+				throw new TypeError("invalid union type");
+			}
+		},
+	},
+	MoneyDetails: {
+		1: ["currency", Str],
+	},
+	PluralDetails: {
+		1: ["type", PluralType],
+		2: ["variants", _PluralTagMessageMap],
+		3: ["custom", _IntMessageMap],
+	},
+	SelectDetails: {
+		1: ["cases", _StrMessageMap],
+		2: ["fallback", Str],
+	},
+};

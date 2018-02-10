@@ -1,6 +1,6 @@
 {
   "name": "lxn-schema",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "The lxn schema definition.",
   "main": "catalog.js",
   "jsnext:main": "catalog.js",
