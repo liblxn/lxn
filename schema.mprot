@@ -1,4 +1,4 @@
-package schema
+package lxn
 
 
 // Catalog holds the data for a message catalog which includes localized
