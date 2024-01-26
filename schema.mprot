@@ -35,9 +35,9 @@ struct NumberFormat {
 	FractionGrouping         int      `11`
 }
 
-// PluralTag is an enumeration of supported plural types. Each plural tag
+// PluralCategory is an enumeration of supported plural types. Each plural category
 // can have its own translation text.
-enum PluralTag {
+enum PluralCategory {
 	Zero   `0`
 	One    `1`
 	Two    `2`
@@ -47,6 +47,8 @@ enum PluralTag {
 }
 
 // Operand represents an operand in a plural rule.
+//
+// https://unicode.org/reports/tr35/tr35-numbers.html#Operands
 enum Operand {
 	AbsoluteValue         `0` // n
 	IntegerDigits         `1` // i
@@ -54,6 +56,7 @@ enum Operand {
 	NumFracDigitsNoZeros  `3` // w
 	FracDigits            `4` // f
 	FracDigitsNoZeros     `5` // t
+	CompactDecExponent    `6` // c, e
 }
 
 // Connective represents a logical connective for two plural rules. Two plural
@@ -90,22 +93,22 @@ struct PluralRule {
 }
 
 // Plural represents a single plural form. It holds a collection of plural rules
-// for a specific plural tag where all rules are connected with each other (see
+// for a specific plural category where all rules are connected with each other (see
 // Rule and Connective).
 struct Plural {
-	Tag   PluralTag     `1`
-	Rules []PluralRule  `2`
+	Category PluralCategory  `1`
+	Rules    []PluralRule    `2`
 }
 
 // Locale holds the data which is necessary to format data in a region
 // specific format.
 struct Locale {
-	ID              string         `1`
-	DecimalFormat   NumberFormat   `2`
-	MoneyFormat     NumberFormat   `3`
-	PercentFormat   NumberFormat   `4`
-	CardinalPlurals []Plural       `5`
-	OrdinalPlurals  []Plural       `6`
+	ID              string        `1`
+	DecimalFormat   NumberFormat  `2`
+	MoneyFormat     NumberFormat  `3`
+	PercentFormat   NumberFormat  `4`
+	CardinalPlurals []Plural      `5`
+	OrdinalPlurals  []Plural      `6`
 }
 
 // Message holds the data for a single message. Each message consists of
@@ -168,11 +171,11 @@ struct MoneyDetails {
 
 // PluralDetails contains the replacement details for plurals. Depending on the
 // variable, different text for each plural rule can be selected. It contains
-// the variants for the supported plural tags and custom overwrites.
+// the variants for the supported plural categories and custom overwrites.
 struct PluralDetails {
-	Type     PluralType             `1`
-	Variants map[PluralTag]Message  `2`
-	Custom   map[int64]Message      `3`
+	Type     PluralType                  `1`
+	Variants map[PluralCategory]Message  `2`
+	Custom   map[int64]Message           `3`
 }
 
 // SelectDetails contains the replacement details to select a text fragment
