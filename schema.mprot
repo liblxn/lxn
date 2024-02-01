@@ -1,12 +1,21 @@
 package lxn
 
 
-// Catalog holds the data for a message catalog which includes localized
-// messages and the locale information needed to format numbers and plurals.
+// Catalog holds messages for a single locale. It corresponds to a the contents
+// of one or more translation files. If you'd like to format translated
+// messages propery you need a dictionary, which also contains all the locale
+// information.
 struct Catalog {
-	Version  int        `1`
-	Locale   Locale     `2`
-	Messages []Message  `3`
+	LocaleID string     `1`
+	Messages []Message  `2`
+}
+
+// Dictionary is used to translate and format messages for the specified locale.
+// It holds all the messages (like Catalog), but also contains all the information
+// needed to format numbers and plurals in this locale.
+struct Dictionary {
+	Locale   Locale     `1`
+	Messages []Message  `2`
 }
 
 // Symbols holds all the symbols that are used to format a number in a specific locale.
